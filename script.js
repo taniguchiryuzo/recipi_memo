@@ -21,17 +21,29 @@ function addNewNote(text = '') {
     // メモ帳を追加
     note.innerHTML = `
     <div class="tools">
-        <button class="edit"><i class="fas fa-edit"></i></button>
-        <button class="delete"><i class="fas fa-trash-alt"></i></button>
+        <p>レシピ(i)</p>
+        <button class="edit"><i class="fas fa-edit"></i>登録/編集</button>
+        <button class="delete"><i class="fas fa-trash-alt"></i>削除</button>
     </div>
-    <div class="main ${text ? "" : "hidden"}"></div>
+    <div class="main ${text ? "" : "hidden"}">
+    </div>
+    <p>タイトル</P>
+    <input type="text" placeholder="タイトル">
+     <p>料理の紹介</P>
+    <textarea placeholder="料理の紹介" class="${text ? "hidden" : ""}">
+    </textarea>
+     <p>材料</P>
     <textarea class="${text ? "hidden" : ""}"></textarea>
+     <p>作り方</P>
+    <textarea class="${text ? "hidden" : ""}"></textarea>
+
     `
 
     // 操作に必要な要素を取得
     const editBtn = note.querySelector('.edit')
     const deleteBtn = note.querySelector('.delete')
     const main = note.querySelector('.main')
+    const input = note.querySelector('input')
     const textArea = note.querySelector('textarea')
 
     // テキストエリアに引数で渡したテキストを代入
@@ -47,7 +59,7 @@ function addNewNote(text = '') {
 
     // 編集ボタンのクリックイベント
     editBtn.addEventListener('click', () => {
-      editNote(main, textArea)
+      editNote(main, input,textArea)
     })
 
     // テキストエリアのイベント
@@ -67,11 +79,12 @@ function addNewNote(text = '') {
 // ローカルストレージにメモ帳を保存
 function updateLS() {
     // 要素を取得
+    const titletext = document.querySelectorAll('input')
     const notesText = document.querySelectorAll('textarea')
-
     const notes = []
 
     // 要素を格納
+    titletext.forEach(note => notes.push(note.value))
     notesText.forEach(note => notes.push(note.value))
 
     // notesという名前でローカルストレージを保存
@@ -88,7 +101,7 @@ function deleteNote(note) {
 }
 
 // メモ帳編集
-function editNote(main, textArea) {
+function editNote(main, input,textArea) {
   // hiddenがついているものは消し、ついてないものは付与する
   main.classList.toggle('hidden')
   textArea.classList.toggle('hidden')
